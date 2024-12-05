@@ -13,7 +13,7 @@ public abstract class Day
 
     public static void Report(int part1, int part2)
     {
-        Console.WriteLine("Part 1 result: " + part1);
-        Console.WriteLine("Part 2 result: " + part2);
+        Console.WriteLine("[Part 1] -> " + part1);
+        Console.WriteLine("[Part 2] -> " + part2);
     }
 }

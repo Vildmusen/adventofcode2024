@@ -32,8 +32,6 @@ public class Day5 : Day, IDay
             } 
             else
             {
-                row.Reverse();
-
                 var newRow = Sort(row, numberRules);
 
                 sum2 += newRow[newRow.Count / 2];

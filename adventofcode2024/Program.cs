@@ -7,14 +7,14 @@ var builder = new ConfigurationBuilder()
 
 var configurationRoot = builder.Build();
 
-var token = configurationRoot.GetSection("ApiKey").Value;
+var cookie = configurationRoot.GetSection("Cookie").Value;
 
 HttpClient client = new()
 {
     BaseAddress = new Uri("https://adventofcode.com")
 };
 
-client.DefaultRequestHeaders.Add("Cookie", token);
+client.DefaultRequestHeaders.Add("Cookie", cookie);
 
 await Utils.GenerateDayInputs(client);
 

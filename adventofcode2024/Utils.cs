@@ -1,5 +1,4 @@
-﻿using adventofcode2024.days;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 
 namespace adventofcode2024;
@@ -11,7 +10,7 @@ public class Utils
     public static async Task PrettyPrint(int day)
     {
         await Console.Out.WriteLineAsync("");
-        await Console.Out.WriteLineAsync($"-------<<<<<<<<<||||| RUNNING DAY {day} |||||>>>>>>>-------");
+        await Console.Out.WriteLineAsync($"-------<<<<<<<<<||||| RUNNING DAY {day} |||||>>>>>>>>>-------");
         await Console.Out.WriteLineAsync("");
     }
 
@@ -27,6 +26,8 @@ public class Utils
 
     public static async Task GenerateDayInputs(HttpClient client)
     {
+        Directory.CreateDirectory(Dir + "/inputs");
+
         var today = DateTime.Today.Day;
 
         while (today > 0)
@@ -58,8 +59,6 @@ public class Utils
 
     private static void CreateInputFile(string content, int day)
     {
-        Directory.CreateDirectory(Dir + "/inputs");
-
         using var stream = File.Create(Dir + $"/inputs/input{day}.txt");
 
         byte[] info = new UTF8Encoding(true).GetBytes(content);

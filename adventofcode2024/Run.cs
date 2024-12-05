@@ -21,6 +21,8 @@ public class Run
 
         List<IDay> all = [ new Day1(), new Day2(), new Day3(), new Day4(), current ];
 
+        var start = DateTime.Now.Ticks;
+
         if (runAll)
         {
             foreach (var day in all)
@@ -32,5 +34,12 @@ public class Run
         {
             await current.Run();
         }
+
+        var end = DateTime.Now.Ticks;
+
+        var seconds = (end - start) / 10000000.0;
+
+        Console.WriteLine();
+        Console.WriteLine("Total execution time: " + seconds);
     }
 }
