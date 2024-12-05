@@ -2,11 +2,13 @@
 
 public abstract class Day
 {
-    public async Task<string[]> Prepare(int day)
+    public async Task<string[]> Prepare(int day, bool useExample)
     {
         await Utils.PrettyPrint(day);
 
-        return await Utils.GetInputArray(day);
+        return useExample ?
+            await Utils.GetExample() :
+            await Utils.GetInputArray(day);
     }
 
     public static void Report(int part1, int part2)

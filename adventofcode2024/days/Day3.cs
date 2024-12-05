@@ -6,7 +6,7 @@ internal class Day3 : Day, IDay
 {
     public async Task Run()
     {
-        var content = await Prepare(3);
+        var content = await Prepare(3, false);
 
         var pattern = @"mul([(]\d+[,]\d+[)])";
 

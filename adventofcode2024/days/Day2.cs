@@ -4,7 +4,7 @@ public class Day2 : Day, IDay
 {
     public async Task Run()
     {
-        var content = await Prepare(2);
+        var content = await Prepare(2, false);
 
         var rows = Utils.GetNumbersFromRows(content, " ");
 

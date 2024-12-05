@@ -4,7 +4,7 @@ public class Day1 : Day, IDay
 {
     public async Task Run()
     {
-        var content = await Prepare(1);
+        var content = await Prepare(1, false);
 
         var left = new List<int>();
         var right = new List<int>();

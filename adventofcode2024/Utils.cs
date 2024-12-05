@@ -1,22 +1,70 @@
-﻿using System.Reflection;
+﻿using adventofcode2024.days;
+using System.Reflection;
+using System.Text;
 
 namespace adventofcode2024;
 
-static public class Utils
+public class Utils
 {
+    public static readonly string Dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
+
     public static async Task PrettyPrint(int day)
     {
         await Console.Out.WriteLineAsync("");
         await Console.Out.WriteLineAsync($"-------<<<<<<<<<||||| RUNNING DAY {day} |||||>>>>>>>-------");
         await Console.Out.WriteLineAsync("");
     }
+
+    public static async Task<string[]> GetExample()
+    {
+        return await File.ReadAllLinesAsync(Dir + $"/example/example1.txt");
+    }
     
     public static async Task<string[]> GetInputArray(int day)
     {
-        var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        var file = await File.ReadAllLinesAsync(dir + $"/inputs/input{day}.txt");
+        return await File.ReadAllLinesAsync(Dir + $"/inputs/input{day}.txt");
+    }
 
-        return file;
+    public static async Task GenerateDayInputs(HttpClient client)
+    {
+        var today = DateTime.Today.Day;
+
+        while (today > 0)
+        {
+            await GenerateDayInput(client, today);
+
+            today--;
+        }      
+    }
+
+    private static async Task GenerateDayInput(HttpClient client, int day)
+    {
+        if (FileExists(day))
+        {
+            return;
+        }
+
+        var response = await client.GetAsync($"/2024/day/{day}/input");
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        CreateInputFile(content, day);
+    }
+
+    private static bool FileExists(int day)
+    {
+        return File.Exists(Dir + $"/inputs/input{day}.txt");
+    }
+
+    private static void CreateInputFile(string content, int day)
+    {
+        Directory.CreateDirectory(Dir + "/inputs");
+
+        using var stream = File.Create(Dir + $"/inputs/input{day}.txt");
+
+        byte[] info = new UTF8Encoding(true).GetBytes(content);
+
+        stream.Write(info, 0, info.Length);
     }
 
     public static List<List<int>> GetNumbersFromRows(string[] rows, string separator)

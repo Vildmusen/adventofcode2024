@@ -4,7 +4,7 @@ internal class Day4 : Day, IDay
 {
     public async Task Run()
     {
-        var content = await Prepare(4);
+        var content = await Prepare(4, false);
 
         var matches = 0;
 

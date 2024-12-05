@@ -8,7 +8,7 @@ public class Day5 : Day, IDay
 {
     public async Task Run()
     {
-        var content = await Prepare(5);
+        var content = await Prepare(5, false);
 
         var breakIndex = content.ToList().IndexOf("");
 
@@ -35,9 +35,6 @@ public class Day5 : Day, IDay
                 row.Reverse();
 
                 var newRow = Sort(row, numberRules);
-
-                newRow.ForEach(i => Console.Write(i + ", "));
-                await Console.Out.WriteLineAsync();
 
                 sum2 += newRow[newRow.Count / 2];
             }
