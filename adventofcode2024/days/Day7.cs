@@ -85,9 +85,9 @@ public class Day7 : Day, IDay
 
             foreach (var s in sums)
             {
-                newSums.Add(long.Parse($"{s}{current}"));
-                newSums.Add(s * current);
-                newSums.Add(s + current);
+                CheckAndAdd(newSums, long.Parse($"{s}{current}"), sum);
+                CheckAndAdd(newSums, s * current, sum);
+                CheckAndAdd(newSums, s + current, sum);                
             }
 
             sums.Clear();
@@ -95,6 +95,14 @@ public class Day7 : Day, IDay
         }
 
         return sums.Contains(sum);
+    }
+
+    public static void CheckAndAdd(List<long> sums, long number, long sum)
+    {
+        if (number <= sum)
+        {
+            sums.Add(number);
+        }
     }
 }
 
