@@ -16,4 +16,10 @@ public abstract class Day
         Console.WriteLine("[Part 1] -> " + part1);
         Console.WriteLine("[Part 2] -> " + part2);
     }
+
+    public static void Report(long part1, long part2)
+    {
+        Console.WriteLine("[Part 1] -> " + part1);
+        Console.WriteLine("[Part 2] -> " + part2);
+    }
 }

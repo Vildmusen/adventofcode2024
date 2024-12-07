@@ -84,4 +84,12 @@ public class Utils
 
         return parsedRows;
     }
+
+    public static List<long> GetNumbersFromRow(string row, string separator)
+    {
+        return row
+            .Split(separator)
+            .Select(long.Parse)
+            .ToList();
+    }
 }
