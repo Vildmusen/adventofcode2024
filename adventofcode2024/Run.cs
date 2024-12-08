@@ -17,9 +17,9 @@ public class Run
             " / __/| |_| / __/|__   _|                                             \r\n" +
             "|_____|\\___/_____|  |_|                                               ");
 
-        var current = new Day7();
+        var current = new Day8();
 
-        List<IDay> all = [ new Day1(), new Day2(), new Day3(), new Day4(), new Day5(), new Day6(), current ];
+        List<IDay> all = [new Day1(), new Day2(), new Day3(), new Day4(), new Day5(), new Day6(), new Day7(), current];
 
         var start = DateTime.Now.Ticks;
 
