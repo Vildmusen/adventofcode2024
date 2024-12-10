@@ -93,3 +93,9 @@ public class Utils
             .ToList();
     }
 }
+
+public struct Coordinate(int x, int y)
+{
+    public int X = x;
+    public int Y = y;
+};
