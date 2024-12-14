@@ -94,8 +94,14 @@ public class Utils
     }
 }
 
-public struct Coordinate(int x, int y)
+public struct Vector2(int x, int y)
 {
     public int X = x;
     public int Y = y;
+
+    public void Add(Vector2 toAdd)
+    {
+        X += toAdd.X;
+        Y += toAdd.Y;
+    }
 };

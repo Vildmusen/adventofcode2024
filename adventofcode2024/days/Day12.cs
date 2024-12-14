@@ -15,7 +15,7 @@ public class Day12 : Day, IDay
 
         foreach (var key in islands.Keys)
         {
-            var current = (List<Coordinate>)islands[key]!;
+            var current = (List<Vector2>)islands[key]!;
 
             var area = current.Count;
 
@@ -34,7 +34,7 @@ public class Day12 : Day, IDay
     public static Hashtable GetIslands(string[] rows)
     {
         var islands = new Hashtable();
-        var visited = new List<Coordinate>();
+        var visited = new List<Vector2>();
 
         for (int i = 0; i < rows.Length; i++)
         {
@@ -42,9 +42,9 @@ public class Day12 : Day, IDay
 
             for (int j = 0; j < row.Length; j++)
             {
-                if (visited.Contains(new Coordinate(i, j))) continue;
+                if (visited.Contains(new Vector2(i, j))) continue;
 
-                var island = GetIsland(rows, row[j], new Coordinate(i, j));
+                var island = GetIsland(rows, row[j], new Vector2(i, j));
 
                 islands[$"{i}-{j}"] = island;
 
@@ -55,15 +55,15 @@ public class Day12 : Day, IDay
         return islands;
     }
 
-    public static List<Coordinate> GetIsland(string[] rows, char symbol, Coordinate position)
+    public static List<Vector2> GetIsland(string[] rows, char symbol, Vector2 position)
     {
-        var next = new List<Coordinate>{ position };
+        var next = new List<Vector2>{ position };
 
-        var adjacent = new List<Coordinate> { position };
+        var adjacent = new List<Vector2> { position };
 
         while (next.Count > 0)
         {
-            var toCheck = new List<Coordinate>();
+            var toCheck = new List<Vector2>();
 
             foreach (var pos in next)
             {
@@ -80,13 +80,13 @@ public class Day12 : Day, IDay
         return adjacent;
     }
 
-    public static void CheckAndAdd(int x, int y, int size, char symbol, string[] rows, List<Coordinate> adjacent, List<Coordinate> toCheck)
+    public static void CheckAndAdd(int x, int y, int size, char symbol, string[] rows, List<Vector2> adjacent, List<Vector2> toCheck)
     {
         var inBounds = y < size && y >= 0 && x < size && x >= 0;
 
         if (inBounds && rows[x][y].Equals(symbol))
         {
-            var toAdd = new Coordinate(x, y);
+            var toAdd = new Vector2(x, y);
 
             if (!adjacent.Contains(toAdd))
             {
@@ -96,17 +96,17 @@ public class Day12 : Day, IDay
         }
     }
 
-    public static List<IEnumerable<Coordinate>> GetCoordsOnEdge(List<Coordinate> island)
+    public static List<IEnumerable<Vector2>> GetCoordsOnEdge(List<Vector2> island)
     {
-        var hasRightEdge = island.Where(coord => !island.Contains(new Coordinate(coord.X, coord.Y + 1)));
-        var hasBottomEdge = island.Where(coord => !island.Contains(new Coordinate(coord.X + 1, coord.Y)));
-        var hasLeftEdge = island.Where(coord => !island.Contains(new Coordinate(coord.X, coord.Y - 1)));
-        var hasTopEdge = island.Where(coord => !island.Contains(new Coordinate(coord.X - 1, coord.Y)));
+        var hasRightEdge = island.Where(coord => !island.Contains(new Vector2(coord.X, coord.Y + 1)));
+        var hasBottomEdge = island.Where(coord => !island.Contains(new Vector2(coord.X + 1, coord.Y)));
+        var hasLeftEdge = island.Where(coord => !island.Contains(new Vector2(coord.X, coord.Y - 1)));
+        var hasTopEdge = island.Where(coord => !island.Contains(new Vector2(coord.X - 1, coord.Y)));
 
         return [hasRightEdge, hasLeftEdge, hasBottomEdge, hasTopEdge];
     }
 
-    public static int GetNumberOfSides(List<IEnumerable<Coordinate>> edgeCoords)
+    public static int GetNumberOfSides(List<IEnumerable<Vector2>> edgeCoords)
     {      
         var totalCount = 0;
 
@@ -118,7 +118,7 @@ public class Day12 : Day, IDay
         return totalCount;
     }
 
-    public static int GetConsecutiveWallsHorizontal(IEnumerable<Coordinate> edges)
+    public static int GetConsecutiveWallsHorizontal(IEnumerable<Vector2> edges)
     {
         var count = 0;
         var edgesByXCoord = edges.GroupBy(e => e.X);
@@ -147,7 +147,7 @@ public class Day12 : Day, IDay
         return count;
     }
 
-    public static int GetConsecutiveWallsVertical(IEnumerable<Coordinate> edges)
+    public static int GetConsecutiveWallsVertical(IEnumerable<Vector2> edges)
     {
         var count = 0;
         var edgesByYCoord = edges.GroupBy(e => e.Y);

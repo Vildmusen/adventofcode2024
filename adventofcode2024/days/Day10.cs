@@ -16,10 +16,10 @@ public class Day10 : Day, IDay
             { 
                 if (content[i][j] == '0')
                 {
-                    var part1Value = CheckPaths(new Coordinate(i, j), content, size, false);
+                    var part1Value = CheckPaths(new Vector2(i, j), content, size, false);
                     if (part1Value != -1) trailheads1.Add(part1Value);
 
-                    var part2Value = CheckPaths(new Coordinate(i, j), content, size);
+                    var part2Value = CheckPaths(new Vector2(i, j), content, size);
                     if (part2Value != -1) trailheads2.Add(part2Value);
                 }
             }
@@ -28,7 +28,7 @@ public class Day10 : Day, IDay
         Report(trailheads1.Sum(), trailheads2.Sum());
     }
 
-    public static int CheckPaths(Coordinate startPos, string[] content, int size, bool allPaths = true)
+    public static int CheckPaths(Vector2 startPos, string[] content, int size, bool allPaths = true)
     {
         var goodSlopes = GetNext(content, startPos, size);
 
@@ -41,7 +41,7 @@ public class Day10 : Day, IDay
                 return goodSlopes.Count;
             }
 
-            var nextSteps = new List<Coordinate>();
+            var nextSteps = new List<Vector2>();
 
             foreach (var position in goodSlopes)
             {
@@ -62,11 +62,11 @@ public class Day10 : Day, IDay
         return -1;
     }
 
-    public static List<Coordinate> GetNext(string[] content, Coordinate position, int size)
+    public static List<Vector2> GetNext(string[] content, Vector2 position, int size)
     {
         var currentValue = int.Parse(content[position.X][position.Y].ToString());
 
-        var validPositions = new List<Coordinate>();
+        var validPositions = new List<Vector2>();
 
         if (position.X - 1 >= 0)
         {
@@ -95,13 +95,13 @@ public class Day10 : Day, IDay
         return validPositions;
     }
 
-    private static void CheckAndAdd(List<Coordinate> valid, string[] content, int value, (int, int) current)
+    private static void CheckAndAdd(List<Vector2> valid, string[] content, int value, (int, int) current)
     {
         var nextValue = content[current.Item1][current.Item2].ToString();
 
         if (int.Parse(nextValue) - 1 == value)
         {
-            valid.Add(new Coordinate(current.Item1, current.Item2));
+            valid.Add(new Vector2(current.Item1, current.Item2));
         }
     }
 }

@@ -42,9 +42,8 @@ public class Day13 : Day, IDay
         var B = 
             (xSum * aY - ySum * aX) / 
             (bX * aY - bY * aX);
-        var A = 
-            (xSum - (B * bX)) / 
-            aX;
+
+        var A = (xSum - (B * bX)) / aX;
 
         var limit = xSum > 10000000000000 ? long.MaxValue : 100;
 
@@ -54,11 +53,6 @@ public class Day13 : Day, IDay
             A <= limit &&
             B <= limit;
 
-        if (valid)
-        {
-            return A * 3 + B;
-        }
-
-        return 0;
+        return !valid ? 0 : A * 3 + B;
     }
 }
