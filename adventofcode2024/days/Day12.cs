@@ -19,13 +19,13 @@ public class Day12 : Day, IDay
 
             var area = current.Count;
 
-            var (circumference, edges) = GetCircumference(current);
-            var numberOfSides = GetNumberOfSides(current, edges);
+            var edgeCoords = GetCoordsOnEdge(current);
+
+            var circumference = edgeCoords.SelectMany(i => i).Count();
+            var numberOfSides = GetNumberOfSides(edgeCoords);
 
             result += area * circumference;
             result2 += area * numberOfSides;
-
-            Console.WriteLine($"{key} - {area} * {numberOfSides} = {area * numberOfSides}");
         }
 
         Report(result, result2);
@@ -96,96 +96,80 @@ public class Day12 : Day, IDay
         }
     }
 
-    public static (int, List<Coordinate>) GetCircumference(List<Coordinate> island)
+    public static List<IEnumerable<Coordinate>> GetCoordsOnEdge(List<Coordinate> island)
     {
-        var totalCount = 0;
+        var hasRightEdge = island.Where(coord => !island.Contains(new Coordinate(coord.X, coord.Y + 1)));
+        var hasBottomEdge = island.Where(coord => !island.Contains(new Coordinate(coord.X + 1, coord.Y)));
+        var hasLeftEdge = island.Where(coord => !island.Contains(new Coordinate(coord.X, coord.Y - 1)));
+        var hasTopEdge = island.Where(coord => !island.Contains(new Coordinate(coord.X - 1, coord.Y)));
 
-        var edges = new List<Coordinate>();
-
-        foreach (var coord in island)
-        {
-            var count = 0;
-
-            if (!island.Contains(new Coordinate(coord.X, coord.Y + 1)))
-            {
-                count++;
-                edges.Add(new Coordinate(coord.X, coord.Y + 1));
-            }           
-            if (!island.Contains(new Coordinate(coord.X + 1, coord.Y)))
-            {
-                count++;
-                edges.Add(new Coordinate(coord.X + 1, coord.Y));
-            }
-            if (!island.Contains(new Coordinate(coord.X, coord.Y - 1)))
-            {
-                count++;
-                edges.Add(new Coordinate(coord.X, coord.Y - 1));
-            }
-            if (!island.Contains(new Coordinate(coord.X - 1, coord.Y)))
-            {
-                count++;
-                edges.Add(new Coordinate(coord.X - 1, coord.Y));
-            }
-
-            totalCount += count;
-        }
-
-        return (totalCount, edges);
+        return [hasRightEdge, hasLeftEdge, hasBottomEdge, hasTopEdge];
     }
 
-    public static int GetNumberOfSides(List<Coordinate> island, List<Coordinate> edges)
-    {
-        var hasRightEdge = new List<Coordinate>();
-        var hasBottomEdge = new List<Coordinate>();
-        var hasLeftEdge = new List<Coordinate>();
-        var hasTopEdge = new List<Coordinate>();
-
-        foreach (var coord in island)
-        {
-            if (edges.Contains(new Coordinate(coord.X, coord.Y + 1))) hasRightEdge.Add(coord);
-            if (edges.Contains(new Coordinate(coord.X + 1, coord.Y))) hasBottomEdge.Add(coord);
-            if (edges.Contains(new Coordinate(coord.X, coord.Y - 1))) hasLeftEdge.Add(coord);
-            if (edges.Contains(new Coordinate(coord.X - 1, coord.Y))) hasTopEdge.Add(coord);
-        }
-
+    public static int GetNumberOfSides(List<IEnumerable<Coordinate>> edgeCoords)
+    {      
         var totalCount = 0;
 
-        totalCount += GetConsecutiveWalls(hasRightEdge, false);
-        totalCount += GetConsecutiveWalls(hasBottomEdge, true);
-        totalCount += GetConsecutiveWalls(hasLeftEdge, false);
-        totalCount += GetConsecutiveWalls(hasTopEdge, true);
+        totalCount += GetConsecutiveWallsVertical(edgeCoords[0]);
+        totalCount += GetConsecutiveWallsVertical(edgeCoords[1]);
+        totalCount += GetConsecutiveWallsHorizontal(edgeCoords[2]);
+        totalCount += GetConsecutiveWallsHorizontal(edgeCoords[3]);
 
         return totalCount;
     }
 
-    public static int GetConsecutiveWalls(List<Coordinate> edges, bool horizontal)
+    public static int GetConsecutiveWallsHorizontal(IEnumerable<Coordinate> edges)
     {
         var count = 0;
+        var edgesByXCoord = edges.GroupBy(e => e.X);
 
-        var edgesGouped = horizontal ? edges.GroupBy(e => e.X) : edges.GroupBy(e => e.Y);
-
-        foreach (var edgeGroup in edgesGouped)
+        foreach (var group in edgesByXCoord)
         {
             count++;
-            var currentGroup = edgeGroup.ToList();
-            var ordered = horizontal ?
-                currentGroup.OrderBy(i => i.Y).ToList() :
-                currentGroup.OrderBy(i => i.X).ToList();
+            var currentGroup = group;
+            var sorted = currentGroup.OrderBy(i => i.Y).ToList();
 
-            var current = ordered[0];
+            var current = sorted[0];
 
-            for (int i = 1; i < ordered.ToList().Count; i++)
+            for (int i = 1; i < sorted.Count; i++)
             {
-                var isConsecutive = horizontal ?
-                    ordered[i].Y - 1 == current.Y :
-                    ordered[i].X - 1 == current.X;
+                var isConsecutive = sorted[i].Y - 1 == current.Y;
 
                 if (!isConsecutive)
                 {
                     count++;
                 }
 
-                current = ordered[i];
+                current = sorted[i];
+            }
+        }
+
+        return count;
+    }
+
+    public static int GetConsecutiveWallsVertical(IEnumerable<Coordinate> edges)
+    {
+        var count = 0;
+        var edgesByYCoord = edges.GroupBy(e => e.Y);
+
+        foreach (var group in edgesByYCoord)
+        {
+            count++;
+            var currentGroup = group;
+            var sorted = currentGroup.OrderBy(i => i.X).ToList();
+
+            var current = sorted[0];
+
+            for (int i = 1; i < sorted.Count; i++)
+            {
+                var isConsecutive = sorted[i].X - 1 == current.X;
+
+                if (!isConsecutive)
+                {
+                    count++;
+                }
+
+                current = sorted[i];
             }
         }
 
