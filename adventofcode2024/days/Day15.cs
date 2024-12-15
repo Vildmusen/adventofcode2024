@@ -123,16 +123,9 @@ public class Day15 : Day, IDay
 
         var boxInTheWay = boxes
             .Where(current.IsColliding)
-            .Except([box])
-            .ToList();
+            .Except([box]);
 
-        if (boxInTheWay.Count > 0)
-        {
-            return boxInTheWay
-                .All(box => CanBoxMove(box, walls, boxes, step));
-        }
-
-        return true;
+        return boxInTheWay.All(box => CanBoxMove(box, walls, boxes, step));
     }
 
     private static void MoveBoxes(Vector2 start, List<Box> boxes, Vector2 step)
