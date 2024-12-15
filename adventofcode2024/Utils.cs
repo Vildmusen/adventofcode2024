@@ -104,4 +104,9 @@ public struct Vector2(int x, int y)
         X += toAdd.X;
         Y += toAdd.Y;
     }
+
+    public bool Equals(Vector2 toCompare)
+    {
+        return toCompare.X == X && toCompare.Y == Y;
+    }
 };
